@@ -9,80 +9,86 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    @State var isLoggedIn = false
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+        if (isLoggedIn) {
+            AppHome()
+        } else {
+            Welcome(isLoggedIn: $isLoggedIn)
+            
         }
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+struct AppHome: View {
+    var body: some View {
+        VStack {
+            Text("Home screen")
+        }
+        
+    }
+}
+
+struct Welcome: View {
+    @State public var email = ""
+    @State public var password = ""
+    @State public var activeScreen = "welcome"
+    @Binding var isLoggedIn : Bool
+    
+    // Put this into a separate style file????
+    public var buttonRadius = 6
+    public var loginScreenButtonWidth = 200.0
+    public var loginScreenButtonHeight = 50.0
+    public var title = "Welcome to Pick^"
+    public var createAccount = "Create an Account"
+    
+    func loginHandle() {
+        print("login handle")
+        self.isLoggedIn = true;
+    }
+    
+    func createHandle() {
+        print("create account handle")
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                VStack {
+                    
+                    TextField("Email", text: $email).autocapitalization(.none).padding()
+                    
+                    SecureField("Password", text: $password).padding()
+                    
+                    if (email.count > 0 && password.count > 0) {
+                          
+                        Button(action: loginHandle) {
+                            Text("Login")
+                                .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
+                                .background(Color.blue)
+                                .cornerRadius(6)
+                                .foregroundColor(Color.white)
+                        }.padding()
+                          
+                    }
+                    Button(action: createHandle) {
+                        Text("Create an Account")
+                            .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
+                            .background(Color.blue)
+                            .cornerRadius(6)
+                            .foregroundColor(Color.white)
+                    }.padding()
+                    
+                }
+            }.navigationTitle(title)
+        }
+        
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView()
     }
 }
+
