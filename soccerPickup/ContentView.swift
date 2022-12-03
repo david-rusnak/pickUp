@@ -9,13 +9,15 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @State var isLoggedIn = false
+    // integrate firebase auth???? do we want sso
+    @State var page = "welcome"
     var body: some View {
-        if (isLoggedIn) {
+        if (page == "home") {
             AppHome()
-        } else {
-            Welcome(isLoggedIn: $isLoggedIn)
-            
+        } else if (page == "welcome") {
+            Welcome(page: $page)
+        } else if (page == "createAccount") {
+            CreateAccount()
         }
     }
 }
@@ -23,9 +25,19 @@ struct ContentView: View {
 struct AppHome: View {
     var body: some View {
         VStack {
+            // design this screen
             Text("Home screen")
         }
         
+    }
+}
+
+struct CreateAccount: View {
+    var body: some View {
+        VStack {
+            // implement firebase create account??? again do we want sso
+            Text("Create an Account!")
+        }
     }
 }
 
@@ -33,7 +45,7 @@ struct Welcome: View {
     @State public var email = ""
     @State public var password = ""
     @State public var activeScreen = "welcome"
-    @Binding var isLoggedIn : Bool
+    @Binding var page : String
     
     // Put this into a separate style file????
     public var buttonRadius = 6
@@ -44,11 +56,12 @@ struct Welcome: View {
     
     func loginHandle() {
         print("login handle")
-        self.isLoggedIn = true;
+        self.page = "home";
     }
     
     func createHandle() {
         print("create account handle")
+        self.page = "createAccount";
     }
     
     var body: some View {
