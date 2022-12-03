@@ -56,7 +56,7 @@ struct Welcome: View {
             VStack {
                 VStack {
                     
-                    TextField("Email", text: $email).autocapitalization(.none).padding()
+                    TextField("Email", text: $email).autocapitalization(.none).autocorrectionDisabled(true).padding()
                     
                     SecureField("Password", text: $password).padding()
                     
