@@ -36,10 +36,41 @@ struct AppHome: View {
 }
 
 struct CreateAccount: View {
+    @State public var email = ""
+    @State public var password = ""
+    public var loginScreenButtonWidth = 200.0
+    public var loginScreenButtonHeight = 50.0
+    
+    func createAccountHandle() {
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+                if error != nil {
+                    print(error?.localizedDescription ?? "")
+                } else {
+                    
+                    print("success")
+                }
+            }
+    }
+    
     var body: some View {
         VStack {
             // implement firebase create account??? again do we want sso
             Text("Create an Account!")
+            
+            // Email
+            TextField("Email", text: $email).autocapitalization(.none).autocorrectionDisabled(true).padding()
+            
+            // Password
+            SecureField("Password", text: $password).padding()
+            
+            Button(action: createAccountHandle) {
+                Text("Create an Account")
+                    .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
+                    .background(Color.blue)
+                    .cornerRadius(6)
+                    .foregroundColor(Color.white)
+            }.padding()
+            
         }
     }
 }
@@ -68,10 +99,6 @@ struct Welcome: View {
             }
     }
     
-    func loginHandle() {
-        print("login handle")
-        //self.page = "home";
-    }
     
     func createHandle() {
         print("create account handle")
