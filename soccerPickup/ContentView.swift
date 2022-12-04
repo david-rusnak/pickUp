@@ -38,6 +38,7 @@ struct AppHome: View {
 struct CreateAccount: View {
     @State public var email = ""
     @State public var password = ""
+    
     public var loginScreenButtonWidth = 200.0
     public var loginScreenButtonHeight = 50.0
     
@@ -50,6 +51,7 @@ struct CreateAccount: View {
                     print("success account created")
                 }
             }
+        // switch page to create profile view
     }
     
     var body: some View {
