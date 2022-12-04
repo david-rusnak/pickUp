@@ -7,6 +7,9 @@
 
 import SwiftUI
 import CoreData
+import Firebase
+
+
 
 struct ContentView: View {
     // integrate firebase auth???? do we want sso
@@ -54,9 +57,20 @@ struct Welcome: View {
     public var title = "Welcome to Pick^"
     public var createAccount = "Create an Account"
     
+    func login() {
+            Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+                if error != nil {
+                    print(error?.localizedDescription ?? "")
+                } else {
+                    self.page = "home";
+                    print("success")
+                }
+            }
+    }
+    
     func loginHandle() {
         print("login handle")
-        self.page = "home";
+        //self.page = "home";
     }
     
     func createHandle() {
@@ -77,7 +91,7 @@ struct Welcome: View {
                     // If there is something in both fields, show login button
                     if (email.count > 0 && password.count > 0) {
                           
-                        Button(action: loginHandle) {
+                        Button(action: login) {
                             Text("Login")
                                 .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
                                 .background(Color.blue)
