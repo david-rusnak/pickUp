@@ -68,11 +68,13 @@ struct Welcome: View {
         NavigationView {
             VStack {
                 VStack {
-                    
+                    // Email
                     TextField("Email", text: $email).autocapitalization(.none).autocorrectionDisabled(true).padding()
                     
+                    // Password
                     SecureField("Password", text: $password).padding()
                     
+                    // If there is something in both fields, show login button
                     if (email.count > 0 && password.count > 0) {
                           
                         Button(action: loginHandle) {
@@ -84,6 +86,8 @@ struct Welcome: View {
                         }.padding()
                           
                     }
+                    
+                    // Always show the create account button
                     Button(action: createHandle) {
                         Text("Create an Account")
                             .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
