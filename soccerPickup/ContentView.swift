@@ -47,7 +47,7 @@ struct CreateAccount: View {
                     print(error?.localizedDescription ?? "")
                 } else {
                     
-                    print("success")
+                    print("success account created")
                 }
             }
     }
