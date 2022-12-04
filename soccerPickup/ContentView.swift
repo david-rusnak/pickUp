@@ -20,7 +20,9 @@ struct ContentView: View {
         } else if (page == "welcome") {
             Welcome(page: $page)
         } else if (page == "createAccount") {
-            CreateAccount()
+            CreateAccount(page: $page)
+        } else if (page == "createProfile") {
+            CreateProfile()
         }
     }
 }
@@ -38,6 +40,7 @@ struct AppHome: View {
 struct CreateAccount: View {
     @State public var email = ""
     @State public var password = ""
+    @Binding var page : String
     
     public var loginScreenButtonWidth = 200.0
     public var loginScreenButtonHeight = 50.0
@@ -52,6 +55,7 @@ struct CreateAccount: View {
                 }
             }
         // switch page to create profile view
+        self.page = "createProfile"
     }
     
     var body: some View {
@@ -74,6 +78,56 @@ struct CreateAccount: View {
             }.padding()
             
         }
+    }
+}
+
+struct CreateProfile: View {
+    public var loginScreenButtonWidth = 200.0
+    public var loginScreenButtonHeight = 50.0
+    
+    @State public var username = ""
+    @State public var dob = Date()
+    @State public var schoolYear = ""
+    @State public var sportInterestsSkill = []
+    
+    func createProfile() {
+        print("updated profile")
+    }
+    
+    
+    var body: some View {
+        VStack{
+            // Username
+            TextField("Username", text: $username).autocapitalization(.none).autocorrectionDisabled(true).padding()
+            
+            // DOB
+            DatePicker(
+                    "Birth Date",
+                    selection: $dob,
+                    displayedComponents: [.date]
+            ).padding()
+            
+            // schoolYear
+            
+            Picker("School Year", selection: $schoolYear) {
+                Text("Freshman").tag("Freshman")
+                Text("Sophomore").tag("Sophomore")
+                Text("Junior").tag("Junior")
+                Text("Senior").tag("Senior")
+            }.padding()
+            
+            // sportInterestSkill
+            
+            // Submit
+            Button(action: createProfile) {
+                Text("Finish Profile")
+                    .frame(width: loginScreenButtonWidth, height: loginScreenButtonHeight)
+                    .background(Color.blue)
+                    .cornerRadius(6)
+                    .foregroundColor(Color.white)
+            }.padding()
+        }
+        
     }
 }
 
