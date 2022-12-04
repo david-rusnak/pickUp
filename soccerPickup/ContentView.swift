@@ -89,11 +89,41 @@ struct CreateProfile: View {
     @State public var dob = Date()
     @State public var schoolYear = ""
     @State public var sportInterestsSkill = []
+    @State var selectedItems = Array<String>()
     
     func createProfile() {
-        print("updated profile")
+        // add profile properties to firestore
     }
     
+    func addSoccer() {
+        if (selectedItems.contains("Soccer")) {
+            if let index = selectedItems.firstIndex(of: "Soccer") {
+                selectedItems.remove(at: index)
+            }
+        } else {
+            selectedItems.append("Soccer")
+        }
+    }
+    
+    func addTennis() {
+        if (selectedItems.contains("Tennis")) {
+            if let index = selectedItems.firstIndex(of: "Tennis") {
+                selectedItems.remove(at: index)
+            }
+        } else {
+            selectedItems.append("Tennis")
+        }
+    }
+    
+    func addBasketball() {
+        if (self.selectedItems.contains("Basketball")) {
+            if let index = selectedItems.firstIndex(of: "Basketball") {
+                selectedItems.remove(at: index)
+            }
+        } else {
+            selectedItems.append("Basketball")
+        }
+    }
     
     var body: some View {
         VStack{
@@ -108,15 +138,38 @@ struct CreateProfile: View {
             ).padding()
             
             // schoolYear
-            
-            Picker("School Year", selection: $schoolYear) {
-                Text("Freshman").tag("Freshman")
-                Text("Sophomore").tag("Sophomore")
-                Text("Junior").tag("Junior")
-                Text("Senior").tag("Senior")
-            }.padding()
-            
-            // sportInterestSkill
+            Form {
+                Picker("School Year", selection: $schoolYear) {
+                    Text("Freshman").tag("Freshman")
+                    Text("Sophomore").tag("Sophomore")
+                    Text("Junior").tag("Junior")
+                    Text("Senior").tag("Senior")
+                }
+                
+                List {
+                    Text("Select sports you would like to play")
+                    Button(action: addSoccer) {
+                        HStack {
+                            Text("Soccer")
+                            Image(systemName: "checkmark").opacity(selectedItems.contains("Soccer") ? 1.0 : 0.0)
+                        }
+                    }
+                    Button(action: addTennis) {
+                        HStack {
+                            Text("Tennis")
+                            Image(systemName: "checkmark").opacity(selectedItems.contains("Tennis") ? 1.0 : 0.0)
+                        }
+                    }
+                    Button(action: addBasketball) {
+                        HStack {
+                            Text("Basketball")
+                            Image(systemName: "checkmark").opacity(selectedItems.contains("Basketball") ? 1.0 : 0.0)
+                        }
+                    }
+                }
+                
+                
+            }
             
             // Submit
             Button(action: createProfile) {
